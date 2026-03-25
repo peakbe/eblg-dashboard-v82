@@ -5,11 +5,15 @@
   <title>EBLG Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  
+
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <!-- PolylineDecorator (doit venir APRÈS Leaflet) -->
   <script src="https://unpkg.com/leaflet-polylinedecorator@1.7.0/dist/leaflet.polyline-decorator.min.js"></script>
-    
+
   <style>
     body { margin:0; font-family:system-ui; display:flex; flex-direction:column; height:100vh; }
     header { padding:0.5rem 1rem; background:#111827; color:#f9fafb; display:flex; justify-content:space-between; }
@@ -62,8 +66,8 @@
   <section id="map"></section>
 </main>
 
+<!-- Ton app.js doit être chargé EN DERNIER -->
 <script src="https://cdn.jsdelivr.net/gh/peakbe/eblg-dashboard-v3/app.js?v=11"></script>
 
-  
 </body>
 </html>
