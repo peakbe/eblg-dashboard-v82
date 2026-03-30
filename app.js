@@ -33,7 +33,9 @@ async function fetchJSON(url) {
 async function loadMetar() {
     const data = await fetchJSON(ENDPOINTS.metar);
     updateMetarUI(data);
+    updateStatusPanel("METAR", data);
 }
+
 
 function updateMetarUI(data) {
     const el = document.getElementById("metar");
@@ -107,6 +109,30 @@ function updateFidsUI(data) {
         `;
         container.appendChild(row);
     });
+}
+
+// =========================
+// PANEL D'ÉTAT GLOBAL
+// =========================
+
+function updateStatusPanel(service, data) {
+    const panel = document.getElementById("status-panel");
+    if (!panel) return;
+
+    if (data.fallback) {
+        panel.className = "status-fallback";
+        panel.innerText = `${service} : fallback (source offline)`;
+        return;
+    }
+
+    if (data.error) {
+        panel.className = "status-offline";
+        panel.innerText = `${service} : offline`;
+        return;
+    }
+
+    panel.className = "status-ok";
+    panel.innerText = `${service} : OK`;
 }
 
 // ======================================================
