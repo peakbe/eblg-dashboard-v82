@@ -256,6 +256,48 @@ function updateSonometers(runway) {
         s.status = runway;
     });
 }
+function updateSonometersAdvanced(runway, phase) {
+    // Reset all to gray
+    Object.values(sonometers).forEach(s => {
+        s.marker.setStyle({ color: "gray", fillColor: "gray" });
+    });
+
+    if (runway === "UNKNOWN") return;
+
+    let green = [];
+    let red = [];
+
+    if (runway === "22") {
+        if (phase === "takeoff") {
+            green = ["F002","F003","F004","F005","F006","F007","F008","F009","F010","F011","F012","F013","F016"];
+        } else if (phase === "landing") {
+            green = ["F001","F014","F015","F017"];
+        }
+    }
+
+    if (runway === "04") {
+        if (phase === "takeoff") {
+            green = ["F002","F003","F007","F008","F009","F011","F013"];
+            red   = ["F004","F005","F006","F010","F012","F016"];
+        } else if (phase === "landing") {
+            green = ["F014","F015"];
+            red   = ["F001","F017"];
+        }
+    }
+
+    // Apply colors
+    green.forEach(id => {
+        if (sonometers[id]) {
+            sonometers[id].marker.setStyle({ color: "green", fillColor: "green" });
+        }
+    });
+
+    red.forEach(id => {
+        if (sonometers[id]) {
+            sonometers[id].marker.setStyle({ color: "red", fillColor: "red" });
+        }
+    });
+}
 
 // ======================================================
 // METAR
@@ -289,8 +331,22 @@ function updateMetarUI(data) {
     updateSonometers(runway);
     drawRunway(runway);
     drawCorridor(runway);
-    updateRunwayPanel(runway, windDir, windSpeed);
+    updateRunwayPanel(panel.innerText =
+    `Piste ${runway} (${r.heading}°) – ${phase === "landing" ? "Atterrissage" : "Décollage"} – ` +
+    `vent ${windDir}°/${windSpeed} kt – crosswind ≈ ${info.crosswind} kt (Δ${info.angleDiff}°)`;
+);
 }
+let phase = "takeoff";
+
+if (runway === "22") {
+    if (windDir >= 200 && windDir <= 260) phase = "landing";
+}
+
+if (runway === "04") {
+    if (windDir >= 20 && windDir <= 80) phase = "landing";
+}
+
+updateSonometersAdvanced(runway, phase);
 
 // ======================================================
 // TAF
